@@ -1,0 +1,256 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "SpectraOX allocation buy entry extract",
+	"type": "object",
+	"properties": {
+		"transactionId": {
+			"title": "The transaction ID uniquely identifies this specific buy data extract.",
+			"description": "The transaction ID uniquely identifies the extract and must be returned as part of the allocation instructions.",
+			"type": "integer",
+			"minimum": 0
+		},
+		"clientCode": {
+			"title": "The client's identifier within SpectraOX",
+			"description": "The client identifier helps the allocation tool link schedule data to goal data",
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 4
+		},
+		"clientName": {
+			"title": "The client's name within SpectraOX",
+			"description": "The long client name helps the allocation system inform the user within that system.",
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 50
+		},
+		"estimateCode": {
+			"title": "The estimate code from the SpectraOX system",
+			"description": "The estimate code is used by the buyers and is found in goal data, but is part of a compound key. The code itself is not unique.",
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 4
+		},
+		"estimateNumber": {
+			"title": "The surrogate key for an estimate in SpectraOX",
+			"description": "The estimate number, unlike the estimate code, is a unique identifer for a given estimate record in SpectraOX",
+			"type": "integer",
+			"minimum": 0
+		},
+		"demoDataType": {
+			"title": "The demo data type determines the unit values found in the estDemos array within the buys",
+			"description": "The demo data type determines the unit values found in the estDemos array within the buys",
+			"type": "string",
+			"enum": [
+				"Rating", "Impression"
+			]
+		},
+		"demoEqualizedLength": {
+			"title": "The length used for the basis of equalization calculations within SpectraOX",
+			"description": "The length used for the basis of equalization calculations within SpectraOX",
+			"type": "integer"
+		},
+		"demoCount": {
+			"title": "The number of elements that will be found in each estDemo array ",
+			"description": "The number of elements that will be found in each estDemo array",
+			"type": "integer",
+			"minimum": 0
+		},
+		"extractRecordCount": {
+			"title": "The length of the buys array",
+			"description": "The length of the buys array",
+			"type": "integer",
+			"minimum": 1
+		},
+		"buys": {
+			"title": "The list of buy data.",
+			"description": "The list of buy data",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"buyNumber": {
+						"title": "The buyNumber is the surrogate key for each unit.",
+						"description": "The buyNumber is the surrogate key for each unit.",
+						"type": "integer"
+					},
+					"updateInvalidReason": {
+						"title": "The update invalid reason, when non-blank, notes that a given unit must not be changed in the returned allocation.",
+						"description": "The update invalid reason, when non-blank, notes that a given unit must not be changed in the returned allocation. Allocation instructions to change an unit described as having an update invalid reason will result in all transactions failing and/or rolled back.",
+						"type": "string",
+						"enum": [
+							"Matched", ""
+						]
+					},
+					"daypartCode": {
+						"title": "The daypart code assigned to the unit.",
+						"description": "The daypart code assigned to the unit. This data helps determine the correct goal data for the allocation exercise.",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 1
+					},
+					"daypartName": {
+						"title": "The name of the daypart.",
+						"description": "The name of the daypart.",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 50
+					},
+					"networkCode": {
+						"title": "The SpectraOX code of the network",
+						"description": "The SpectraOX code of the network",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 4
+					},
+					"networkName": {
+						"title": "The name of the network in SpectraOX",
+						"description": "The name of the network in SpectraOX",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 50
+					},
+					"programCode": {
+						"title": "The program code in SpectraOX",
+						"description": "The program code in SpectraOX",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 8
+					},
+					"programName": {
+						"title": "The program name in SpectraOX",
+						"description": "The program name in SpectraOX",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 50
+					},
+					"brandCode": {
+						"title": "The current brand assignment within SpectraOX for this unit.",
+						"description": "The current brand assignment within SpectraOX for this unit.",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 4
+					},
+					"brandName": {
+						"title": "The brand name for the currently allocated brand for this unit.",
+						"description": "The brand name for the currently allocated brand for this unit.",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 50
+					},
+					"programStartTime": {
+						"title": "The start time of the program/rotation for this unit.",
+						"description": "The start time of the program/rotation for this unit",
+						"type": "string",
+						"minLength": 5,
+						"maxLength": 5,
+						"pattern": "[0-9]{4}[AP]"
+					},
+					"programEndTime": {
+						"title": "The end time of the program/rotation for this unit.",
+						"description": "The end time of the program/rotation for this unit",
+						"type": "string",
+						"minLength": 5,
+						"maxLength": 5,
+						"pattern": "[0-9]{4}[AP]"
+					},
+					"programDays": {
+						"title": "The possible days of the week in the rotation purchased for this unit.",
+						"description": "The possible days of the week in the rotation purchased for this unit.",
+						"type": "object",
+						"properties": {
+							"Mon": {
+								"type": "boolean"
+							},
+							"Tue": {
+								"type": "boolean"
+							},
+							"Wed": {
+								"type": "boolean"
+							},
+							"Thu": {
+								"type": "boolean"
+							},
+							"Fri": {
+								"type": "boolean"
+							},
+							"Sat": {
+								"type": "boolean"
+							},
+							"Sun": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+						],
+						"additionalProperties": false
+					},
+					"airDate": {
+						"title": "The first possible date this unit may air.",
+						"description": "The first possible date this unit may air.",						
+						"type": "string",
+						"minLength": 8,
+						"maxLength": 8,
+						"pattern": "[0-9]{8}"
+					},
+					"unitLength": {
+						"title": "The number of seconds within this purchased unit",
+						"description": "The number of seconds within this purchased unit",
+						"type": "integer",
+						"minimum": 0
+					},
+					"timeCost": {
+						"title": "The current time cost for this unit",
+						"description": "The current time cost for this unit",
+						"type": "number",
+						"minimum": 0
+					},
+					"estDemos": {
+						"title": "The list of demographic estimates for this unit",
+						"description": "The list of demographic estimates for this unit",						
+						"type": "array",
+						"minItems": 1,
+						"maxItems": 20,
+						"items": {
+							"type": "object",
+							"properties": {
+								"demoType": {
+									"title": "The demographic modifier for this demo from the inbound schedule data.",
+									"description": "The demographic modifier distinguishes differences in ethnicity and/or Nielsen ratings products/streams",
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 1
+								},
+								"demoCode": {
+									"title": "The demographic (i.e. sex and age range) estimate for the new unit.",
+									"description": "The demographic (i.e. sex and age range) estimate for the new unit.",
+									"type": "string",
+									"maxLength": 6
+								},
+								"estData": {
+									"title": "The numeric rating for the new unit.",
+									"description": "All information provided by SpectraOX will be in terms of unequivalenced ratings regardless of selection of users.",
+									"type": "number",
+									"minimum": 0,
+									"maximum": 99.9
+								}
+							},
+							"required": [
+								"demoType", "demoCode", "estData"
+							],
+							"additionalProperties": false
+						}
+					}
+				},
+				"required": [
+					"buyNumber", "updateInvalidReason", "daypartCode", "daypartName", "networkCode", "networkName", "programCode", "programName", "brandCode", "brandName", "programStartTime", "programEndTime", "programDays", "airDate", "unitLength", "timeCost", "estDemos"
+				],
+				"additionalProperties": false
+			}
+		}
+	},
+	"required": [
+		"transactionId", "clientCode", "clientName", "estimateCode", "estimateNumber", "demoDataType", "demoEqualizedLength", "demoCount", "extractRecordCount", "buys"
+	],
+	"additionalProperties": false
+}

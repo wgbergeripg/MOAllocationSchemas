@@ -1,0 +1,123 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "SpectraOX network allocation instructions schema",
+	"type": "object",
+	"properties": {
+		"estimateNumber": {
+			"title": "SpectraOX internal estimate number",
+			"description": "The estimate number will be provided in the schedule export schema and must be returned as-is in this property",
+			"type": "integer"
+		},
+		"transactions": {
+			"title": "A list of actions to take on the buy data that represent a series of brand allocation instructions ",
+			"description": "Every inbound unit from the schedule extract will be included in a single transaction and each transaction in this list describes what (if any) changes are required to construct the desired allocations.",
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"properties": {
+					"inboundBuyNumbers": {
+						"title": "Buy numbers from inbound schedule data included in this transaction. ",
+						"description": "Buy numbers from the inbound schedule data will be changed/replaced with units with all the same attributes as the original buy, with the attributes listed in the outbound units replacing those in the copied units. All units within the array of inboundBuyNumbers must have equivalent values in the following fields or the entire transaction will be rejected:",
+						"type": "array",
+						"items": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					"outboundUnits": {
+						"title": "Outbound units describe new units to replace existing inbound units",
+						"description": "Outbound units will replace inbound units (logically if not physically) with versions that are identical to their replacements with attributes changed as described within the objects properties in this array",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"brandCode": {
+									"title": "The brand code for the new unit.",
+									"description": "The brand code for the new unit. This code must exist within the SpectraOX system already. Failure to match will result in the rejection of the entire transaction",
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 4
+								},
+								"timeCost": {
+									"title": "The time cost for the new unit.",
+									"description": "The time cost for the new unit must be positive and less than the maximum possible cost in the SpectraOX system. The sum of inboundBuyNumbers existing costs must equal the sum of all time cost fields in the outbound units or the entire transaction will be rejected.",
+									"type": "number",
+									"minimum": 0,
+									"maximum": 9999999.99
+								},
+								"unitLength": {
+									"title": "The unit length of the new unit.",
+									"description": "The unit length of the new unit. The sum of all of the inbound buynumber units must equal the sum of the outbound unit length values or the entire transaction will be rejected.",
+									"type": "integer",
+									"minimum": 0,
+									"maximum": 999
+								},
+								"estDemos": {
+									"title": "The estimated demographic ratings for the new unit.",
+									"description": "The estimated demographic ratings for the new unit",
+									"type": "array",
+									"minItems": 1,
+									"items": {
+										"type": "object",
+										"properties": {
+											"demoType": {
+												"title": "The demographic modifier for this demo from the inbound schedule data.",
+												"description": "The demographic modifier distinguishes differences in ethnicity and/or Nielsen ratings products/streams",
+												"type": "string",
+												"minLength": 1,
+												"maxLength": 1
+											},
+											"demoCode": {
+												"title": "The demographic (i.e. sex and age range) estimate for the new unit.",
+												"description": "The demographic code provided by the schedule data will be returned with any needed changes. The sum of all demographics may be different than the sum of total inbound demographics.",
+												"type": "string",
+												"maxLength": 6
+											},
+											"estData": {
+												"title": "The numeric rating for the new unit.",
+												"description": "All information provided back to SpectraOX will be in terms of unequivalenced ratings regardless of selection of users.",
+												"type": "number",
+												"minimum": 0,
+												"maximum": 99.9
+											}
+										},
+										"required": [
+											"demoType",
+											"demoCode",
+											"estData"
+										],
+										"additionalProperties": false
+									}
+								}
+							},
+							"required": [
+								"brandCode",
+								"timeCost",
+								"unitLength",
+								"estDemos"
+							],
+							"additionalProperties": false
+						}
+					}
+				},
+				"required": [
+					"inboundBuyNumbers",
+					"outboundUnits"
+				],
+				"additionalProperties": false
+			}
+		},
+		"transactionId": {
+			"title": "The SpectraOX surrogate key to identify a specific extract dataset",
+			"description": "The inbound schedule data will provide a field named transationId that must be returned as-is in this property",
+			"type": "integer"
+		}
+	},
+	"required": [
+		"estimateNumber",
+		"transactions",
+		"transactionId"
+	],
+	"additionalProperties": false
+}
