@@ -41,7 +41,8 @@
 			"description": "The demo data type determines the unit values found in the estDemos array within the buys",
 			"type": "string",
 			"enum": [
-				"Rating", "Impression"
+				"Rating",
+				"Impression"
 			]
 		},
 		"demoEqualizedLength": {
@@ -78,15 +79,16 @@
 						"description": "The update invalid reason, when non-blank, notes that a given unit must not be changed in the returned allocation. Allocation instructions to change an unit described as having an update invalid reason will result in all transactions failing and/or rolled back.",
 						"type": "string",
 						"enum": [
-							"Matched", ""
+							"Matched",
+							""
 						]
 					},
 					"daypartCode": {
 						"title": "The daypart code assigned to the unit.",
-						"description": "The daypart code assigned to the unit. This data helps determine the correct goal data for the allocation exercise.",
+						"description": "The daypart code assigned to the unit. This data helps determine the correct goal data for the allocation exercise. All units within a given extract must have the same daypart code throughout.",
 						"type": "string",
 						"minLength": 1,
-						"maxLength": 1
+						"maxLength": 2
 					},
 					"daypartName": {
 						"title": "The name of the daypart.",
@@ -181,13 +183,19 @@
 							}
 						},
 						"required": [
-							"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+							"Mon",
+							"Tue",
+							"Wed",
+							"Thu",
+							"Fri",
+							"Sat",
+							"Sun"
 						],
 						"additionalProperties": false
 					},
 					"airDate": {
 						"title": "The first possible date this unit may air.",
-						"description": "The first possible date this unit may air.",						
+						"description": "The first possible date this unit may air. The expected format for dates here is YYYYMMDD",
 						"type": "string",
 						"minLength": 8,
 						"maxLength": 8,
@@ -207,7 +215,7 @@
 					},
 					"estDemos": {
 						"title": "The list of demographic estimates for this unit",
-						"description": "The list of demographic estimates for this unit",						
+						"description": "The list of demographic estimates for this unit",
 						"type": "array",
 						"minItems": 1,
 						"maxItems": 20,
@@ -236,21 +244,60 @@
 								}
 							},
 							"required": [
-								"demoType", "demoCode", "estData"
+								"demoType",
+								"demoCode",
+								"estData"
 							],
 							"additionalProperties": false
 						}
 					}
 				},
 				"required": [
-					"buyNumber", "updateInvalidReason", "daypartCode", "daypartName", "networkCode", "networkName", "programCode", "programName", "brandCode", "brandName", "programStartTime", "programEndTime", "programDays", "airDate", "unitLength", "timeCost", "estDemos"
+					"buyNumber",
+					"updateInvalidReason",
+					"daypartCode",
+					"daypartName",
+					"networkCode",
+					"networkName",
+					"programCode",
+					"programName",
+					"brandCode",
+					"brandName",
+					"programStartTime",
+					"programEndTime",
+					"programDays",
+					"airDate",
+					"unitLength",
+					"timeCost",
+					"estDemos"
 				],
 				"additionalProperties": false
 			}
+		},
+		"networkType": {
+			"type": "string",
+			"minLength": 0,
+			"maxLength": 1,
+			"enum": [
+				"N",
+				"C",
+				"S",
+				""
+			]
 		}
 	},
 	"required": [
-		"transactionId", "clientCode", "clientName", "estimateCode", "estimateNumber", "demoDataType", "demoEqualizedLength", "demoCount", "extractRecordCount", "buys"
+		"transactionId",
+		"clientCode",
+		"clientName",
+		"estimateCode",
+		"estimateNumber",
+		"demoDataType",
+		"demoEqualizedLength",
+		"demoCount",
+		"extractRecordCount",
+		"buys",
+		"networkType"
 	],
 	"additionalProperties": false
 }

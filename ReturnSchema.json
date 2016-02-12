@@ -18,7 +18,7 @@
 				"properties": {
 					"inboundBuyNumbers": {
 						"title": "Buy numbers from inbound schedule data included in this transaction. ",
-						"description": "Buy numbers from the inbound schedule data will be changed/replaced with units with all the same attributes as the original buy, with the attributes listed in the outbound units replacing those in the copied units. All units within the array of inboundBuyNumbers must have equivalent values in the following fields or the entire transaction will be rejected:",
+						"description": "Buy numbers from the inbound schedule data will be changed/replaced with units with all the same attributes as the original buy, with the attributes listed in the outbound units replacing those in the copied units. All units within the array of inboundBuyNumbers must have equivalent values in the following fields or the entire transaction will be rejected: networkCode, daypartCode, programCode, airDays, startTime, airDate, all demographic ratings. Costs must be no greater than one (1) dollar different.",
 						"type": "array",
 						"items": {
 							"type": "integer",
@@ -27,7 +27,7 @@
 					},
 					"outboundUnits": {
 						"title": "Outbound units describe new units to replace existing inbound units",
-						"description": "Outbound units will replace inbound units (logically if not physically) with versions that are identical to their replacements with attributes changed as described within the objects properties in this array",
+						"description": "Outbound units will replace inbound units (logically if not physically) with versions that are identical to their replacements with attributes changed as described within the objects properties in this array. A blank/null array represents an instruction to leave the inbound units completely unchanged. All units with a non-null updateInvalidReason must be returned with a blank/null array to represent no change. Where non-null outbound units exist, all dollars and unit lengths must sum between the sets of inbound and outbound units.",
 						"type": "array",
 						"items": {
 							"type": "object",
