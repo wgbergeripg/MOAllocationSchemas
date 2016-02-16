@@ -3,6 +3,12 @@
 	"description": "SpectraOX network allocation instructions schema",
 	"type": "object",
 	"properties": {
+		"transactionId": {
+			"title": "The transaction ID uniquely identifies this specific buy data extract.",
+			"description": "The transaction ID uniquely identifies the extract and must be returned as part of the allocation instructions.",
+			"type": "integer",
+			"minimum": 0
+		},
 		"estimateNumber": {
 			"title": "SpectraOX internal estimate number",
 			"description": "The estimate number will be provided in the schedule export schema and must be returned as-is in this property",
@@ -34,9 +40,9 @@
 							"properties": {
 								"brandCode": {
 									"title": "The brand code for the new unit.",
-									"description": "The brand code for the new unit. This code must exist within the SpectraOX system already. Failure to match will result in the rejection of the entire transaction",
+									"description": "The brand code for the new unit. This code must exist within the SpectraOX system already. If the buy is left unallocated, the code will be an empty string. Failure to match will result in the rejection of the entire transaction",
 									"type": "string",
-									"minLength": 1,
+									"minLength": 0,
 									"maxLength": 4
 								},
 								"timeCost": {
