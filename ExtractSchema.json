@@ -7,7 +7,7 @@
 			"title": "The transaction ID uniquely identifies this specific buy data extract.",
 			"description": "The transaction ID uniquely identifies the extract and must be returned as part of the allocation instructions.",
 			"type": "integer",
-			"minimum": 0
+			"minimum": 1
 		},
 		"clientCode": {
 			"title": "The client's identifier within SpectraOX",
@@ -21,7 +21,7 @@
 			"description": "The long client name helps the allocation system inform the user within that system.",
 			"type": "string",
 			"minLength": 1,
-			"maxLength": 50
+			"maxLength": 30
 		},
 		"estimateCode": {
 			"title": "The estimate code from the SpectraOX system",
@@ -34,7 +34,7 @@
 			"title": "The surrogate key for an estimate in SpectraOX",
 			"description": "The estimate number, unlike the estimate code, is a unique identifer for a given estimate record in SpectraOX",
 			"type": "integer",
-			"minimum": 0
+			"minimum": 1
 		},
 		"demoDataType": {
 			"title": "The demo data type determines the unit values found in the estDemos array within the buys",
@@ -42,19 +42,22 @@
 			"type": "string",
 			"enum": [
 				"Rating",
-				"Impression"
+				"Impression",
+				"Shr",
+				"VPH"
 			]
 		},
 		"demoEqualizedLength": {
 			"title": "The length used for the basis of equalization calculations within SpectraOX",
-			"description": "The length used for the basis of equalization calculations within SpectraOX",
+			"description": "The length used for the basis of equalization calculations within SpectraOX. This field may be removed based on the description of estdata that the ratings will always be raw/unequivalenced data.",
 			"type": "integer"
 		},
 		"demoCount": {
 			"title": "The number of elements that will be found in each estDemo array ",
 			"description": "The number of elements that will be found in each estDemo array",
 			"type": "integer",
-			"minimum": 0
+			"minimum": 0,
+			"maximum": 20
 		},
 		"extractRecordCount": {
 			"title": "The length of the buys array",
@@ -66,6 +69,7 @@
 			"title": "The list of buy data.",
 			"description": "The list of buy data",
 			"type": "array",
+			"minItems": 1,
 			"items": {
 				"type": "object",
 				"properties": {
@@ -80,6 +84,9 @@
 						"type": "string",
 						"enum": [
 							"Matched",
+							"Cleared",
+							"Billed",
+							"Trafficked",
 							""
 						]
 					},
@@ -95,7 +102,7 @@
 						"description": "The name of the daypart.",
 						"type": "string",
 						"minLength": 1,
-						"maxLength": 50
+						"maxLength": 30
 					},
 					"networkCode": {
 						"title": "The SpectraOX code of the network",
@@ -109,21 +116,21 @@
 						"description": "The name of the network in SpectraOX",
 						"type": "string",
 						"minLength": 1,
-						"maxLength": 50
+						"maxLength": 30
 					},
 					"programCode": {
 						"title": "The program code in SpectraOX",
 						"description": "The program code in SpectraOX",
 						"type": "string",
 						"minLength": 1,
-						"maxLength": 8
+						"maxLength": 6
 					},
 					"programName": {
 						"title": "The program name in SpectraOX",
-						"description": "The program name in SpectraOX",
+						"description": "The program name in SpectraOX, entered for the buy unit",
 						"type": "string",
 						"minLength": 1,
-						"maxLength": 50
+						"maxLength": 30
 					},
 					"brandCode": {
 						"title": "The current brand assignment within SpectraOX for this unit.",
@@ -137,7 +144,7 @@
 						"description": "The brand name for the currently allocated brand for this unit. If the buy is unallocated, the code will be an empty string",
 						"type": "string",
 						"minLength": 0,
-						"maxLength": 50
+						"maxLength": 30
 					},
 					"programStartTime": {
 						"title": "The start time of the program/rotation for this unit.",
@@ -193,6 +200,14 @@
 						],
 						"additionalProperties": false
 					},
+					"airDate": {
+						"title": "Air date, or the first possible date this unit may air.",
+						"description": "The air date as entered in SpectraOX. The expected format for dates here is YYYYMMDD",
+						"type": "string",
+						"minLength": 8,
+						"maxLength": 8,
+						"pattern": "[0-9]{8}"
+					},
 					"firstAirDate": {
 						"title": "Air date, or the first possible date this unit may air.",
 						"description": "If the unit is scheduled to air on a specific date, this will be that date.  Otherwise, the first possible date in the week this unit may air (consistent with latest TRUE programDays). The expected format for dates here is YYYYMMDD",
@@ -213,19 +228,20 @@
 						"title": "The number of seconds within this purchased unit",
 						"description": "The number of seconds within this purchased unit",
 						"type": "integer",
-						"minimum": 0
+						"minimum": 1
 					},
 					"timeCost": {
 						"title": "The current time cost for this unit",
 						"description": "The current time cost for this unit",
 						"type": "number",
-						"minimum": 0
+						"minimum": 0,
+						"maximum": 9999999.99
 					},
 					"estDemos": {
 						"title": "The list of demographic estimates for this unit",
 						"description": "The list of demographic estimates for this unit",
 						"type": "array",
-						"minItems": 1,
+						"minItems": 0,
 						"maxItems": 20,
 						"items": {
 							"type": "object",
@@ -241,14 +257,15 @@
 									"title": "The demographic (i.e. sex and age range) estimate for the new unit.",
 									"description": "The demographic (i.e. sex and age range) estimate for the new unit.",
 									"type": "string",
+									"minLength": 1,
 									"maxLength": 6
 								},
 								"estData": {
 									"title": "The numeric rating for the new unit.",
-									"description": "All information provided by SpectraOX will be in terms of unequivalenced ratings regardless of selection of users.",
+									"description": "All information provided by SpectraOX will be in terms of unequivalenced ratings regardless of selection of users. As the estimated data could be for Ratings/Impresions/Shr/VPH, the max value will differ.",
 									"type": "number",
 									"minimum": 0,
-									"maximum": 99.9
+									"maximum": 9999999.99
 								}
 							},
 							"required": [
@@ -280,15 +297,12 @@
 					"networkName",
 					"programCode",
 					"programName",
-					"brandCode",
-					"brandName",
 					"programStartTime",
 					"programEndTime",
 					"programDays",
 					"airDate",
 					"unitLength",
 					"timeCost",
-					"estDemos",
 					"networkType"
 				],
 				"additionalProperties": false

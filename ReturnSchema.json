@@ -7,12 +7,13 @@
 			"title": "The transaction ID uniquely identifies this specific buy data extract.",
 			"description": "The transaction ID uniquely identifies the extract and must be returned as part of the allocation instructions.",
 			"type": "integer",
-			"minimum": 0
+			"minimum": 1
 		},
 		"estimateNumber": {
 			"title": "SpectraOX internal estimate number",
 			"description": "The estimate number will be provided in the schedule export schema and must be returned as-is in this property",
-			"type": "integer"
+			"type": "integer",
+			"minimum": 1
 		},
 		"transactions": {
 			"title": "A list of actions to take on the buy data that represent a series of brand allocation instructions ",
@@ -33,7 +34,7 @@
 					},
 					"outboundUnits": {
 						"title": "Outbound units describe new units to replace existing inbound units",
-						"description": "Outbound units will replace inbound units (logically if not physically) with versions that are identical to their replacements with attributes changed as described within the objects properties in this array. A blank/null array represents an instruction to leave the inbound units completely unchanged. All units with a non-null updateInvalidReason must be returned with a blank/null array to represent no change. Where non-null outbound units exist, all dollars and unit lengths must sum between the sets of inbound and outbound units.",
+						"description": "Outbound units will replace inbound units (logically if not physically) with versions that are identical to their replacements with attributes changed as described within the objects properties in this array. A blank/null array represents an instruction to leave the inbound units completely unchanged. All units with a non-null updateInvalidReason must be returned with a blank/null array to represent no change. Where non-null outbound units exist, all dollars and unit lengths must sum between the sets of inbound and outbound units. Assuming the extract is made with a null updateInvalidReason code... if the outboundUnits count match inboundBuyNumbers, they all will be treated as changed. If the outboundUnits count is more than the inboundBuyNumbers count, the additional ones will be treated as adds. If the outboundUnits count is less than the inboundBuyNumbers count, the ones that are not present will be pre-empted. The outboundUnits will be mapped to the inboundBuyNumbers in the same order, meaning the first outboundUnit will be treated as the buy with the first entry in the inboundBuyNumbers, the second outboundUnit will be treated as the buy with the second entry in the inboundBuyNumbers and so on.",
 						"type": "array",
 						"items": {
 							"type": "object",
@@ -56,14 +57,14 @@
 									"title": "The unit length of the new unit.",
 									"description": "The unit length of the new unit. The sum of all of the inbound buynumber units must equal the sum of the outbound unit length values or the entire transaction will be rejected.",
 									"type": "integer",
-									"minimum": 0,
+									"minimum": 1,
 									"maximum": 999
 								},
 								"estDemos": {
 									"title": "The estimated demographic ratings for the new unit.",
 									"description": "The estimated demographic ratings for the new unit",
 									"type": "array",
-									"minItems": 1,
+									"minItems": 0,
 									"items": {
 										"type": "object",
 										"properties": {
@@ -78,6 +79,7 @@
 												"title": "The demographic (i.e. sex and age range) estimate for the new unit.",
 												"description": "The demographic code provided by the schedule data will be returned with any needed changes. The sum of all demographics may be different than the sum of total inbound demographics.",
 												"type": "string",
+												"minLength": 1,
 												"maxLength": 6
 											},
 											"estData": {
@@ -85,7 +87,7 @@
 												"description": "All information provided back to SpectraOX will be in terms of unequivalenced ratings regardless of selection of users.",
 												"type": "number",
 												"minimum": 0,
-												"maximum": 99.9
+												"maximum": 9999999.99
 											}
 										},
 										"required": [
@@ -100,30 +102,23 @@
 							"required": [
 								"brandCode",
 								"timeCost",
-								"unitLength",
-								"estDemos"
+								"unitLength"
 							],
 							"additionalProperties": false
 						}
 					}
 				},
 				"required": [
-					"inboundBuyNumbers",
-					"outboundUnits"
+					"inboundBuyNumbers"
 				],
 				"additionalProperties": false
 			}
 		},
-		"transactionId": {
-			"title": "The SpectraOX surrogate key to identify a specific extract dataset",
-			"description": "The inbound schedule data will provide a field named transationId that must be returned as-is in this property",
-			"type": "integer"
-		}
 	},
 	"required": [
+		"transactionId",
 		"estimateNumber",
-		"transactions",
-		"transactionId"
+		"transactions"		
 	],
 	"additionalProperties": false
 }
