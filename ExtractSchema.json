@@ -36,22 +36,6 @@
 			"type": "integer",
 			"minimum": 1
 		},
-		"demoDataType": {
-			"title": "The demo data type determines the unit values found in the estDemos array within the buys",
-			"description": "The demo data type determines the unit values found in the estDemos array within the buys",
-			"type": "string",
-			"enum": [
-				"Rating",
-				"Impression",
-				"Shr",
-				"VPH"
-			]
-		},
-		"demoEqualizedLength": {
-			"title": "The length used for the basis of equalization calculations within SpectraOX",
-			"description": "The length used for the basis of equalization calculations within SpectraOX. This field may be removed based on the description of estdata that the ratings will always be raw/unequivalenced data.",
-			"type": "integer"
-		},
 		"demoCount": {
 			"title": "The number of elements that will be found in each estDemo array ",
 			"description": "The number of elements that will be found in each estDemo array",
@@ -260,9 +244,16 @@
 									"minLength": 1,
 									"maxLength": 6
 								},
-								"estData": {
+								"estRtgData": {
 									"title": "The numeric rating for the new unit.",
-									"description": "All information provided by SpectraOX will be in terms of unequivalenced ratings regardless of selection of users. As the estimated data could be for Ratings/Impresions/Shr/VPH, the max value will differ.",
+									"description": "The unequivalenced Estimated Rating data.",
+									"type": "number",
+									"minimum": 0,
+									"maximum": 999.99
+								},
+								"estImpData": {
+									"title": "The numeric rating for the new unit.",
+									"description": "The unequivalenced Estimated Impression data.",
 									"type": "number",
 									"minimum": 0,
 									"maximum": 9999999.99
@@ -271,7 +262,8 @@
 							"required": [
 								"demoType",
 								"demoCode",
-								"estData"
+								"estRtgData",
+								"estImpData"
 							],
 							"additionalProperties": false
 						}
@@ -301,6 +293,8 @@
 					"programEndTime",
 					"programDays",
 					"airDate",
+					"lastAirDate",
+					"firstAirDate",
 					"unitLength",
 					"timeCost",
 					"networkType"
@@ -315,8 +309,6 @@
 		"clientName",
 		"estimateCode",
 		"estimateNumber",
-		"demoDataType",
-		"demoEqualizedLength",
 		"demoCount",
 		"extractRecordCount",
 		"buys"
