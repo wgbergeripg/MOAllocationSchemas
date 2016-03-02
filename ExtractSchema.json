@@ -192,22 +192,6 @@
 						"maxLength": 8,
 						"pattern": "[0-9]{8}"
 					},
-					"firstAirDate": {
-						"title": "Air date, or the first possible date this unit may air.",
-						"description": "If the unit is scheduled to air on a specific date, this will be that date.  Otherwise, the first possible date in the week this unit may air (consistent with latest TRUE programDays). The expected format for dates here is YYYYMMDD",
-						"type": "string",
-						"minLength": 8,
-						"maxLength": 8,
-						"pattern": "[0-9]{8}"
-					},
-					"lastAirDate": {
-						"title": "Air date, or the last possible date this unit may air.",
-						"description": "If the unit is scheduled to air on a specific date, this will be that date.  Otherwise, the last possible date in the week this unit may air (consistent with earliest TRUE programDays). The expected format for dates here is YYYYMMDD",
-						"type": "string",
-						"minLength": 8,
-						"maxLength": 8,
-						"pattern": "[0-9]{8}"
-					},
 					"unitLength": {
 						"title": "The number of seconds within this purchased unit",
 						"description": "The number of seconds within this purchased unit",
