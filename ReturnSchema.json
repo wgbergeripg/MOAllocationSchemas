@@ -82,9 +82,16 @@
 												"minLength": 1,
 												"maxLength": 6
 											},
-											"estData": {
+											"estRtgData": {
 												"title": "The numeric rating for the new unit.",
-												"description": "All information provided back to SpectraOX will be in terms of unequivalenced ratings regardless of selection of users.",
+												"description": "The unequivalenced Estimated Rating data.",
+												"type": "number",
+												"minimum": 0,
+												"maximum": 999.99
+											},
+											"estImpData": {
+												"title": "The numeric rating for the new unit.",
+												"description": "The unequivalenced Estimated Impression data.",
 												"type": "number",
 												"minimum": 0,
 												"maximum": 9999999.99
@@ -93,7 +100,8 @@
 										"required": [
 											"demoType",
 											"demoCode",
-											"estData"
+											"estRtgData",
+											"estImpData"
 										],
 										"additionalProperties": false
 									}
